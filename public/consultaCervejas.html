@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TainhaBeer - Consulta de Cervejas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .cerveja {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .cerveja h2 {
+            margin-top: 0;
+        }
+        .cerveja p {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consultar Cervejas</h1>
+    
+    <!-- Formulário para buscar cerveja por nome -->
+    <form id="buscarPorNomeForm">
+        <label for="nome">Buscar por Nome:</label>
+        <input type="text" id="nome" name="nome">
+        <button type="submit">Buscar</button>
+    </form>
+    
+    <!-- Formulário para buscar cervejas por nacionalidade -->
+    <form id="buscarPorNacionalidadeForm">
+        <label for="nacionalidade">Buscar por Nacionalidade:</label>
+        <input type="text" id="nacionalidade" name="nacionalidade">
+        <button type="submit">Buscar</button>
+    </form>
+    
+    <!-- Formulário para buscar cervejas por tipo -->
+    <form id="buscarPorTipoForm">
+        <label for="tipo">Buscar por Tipo:</label>
+        <input type="text" id="tipo" name="tipo">
+        <button type="submit">Buscar</button>
+    </form>
+    
+    <!-- Formulário para buscar cervejas por nome parcial -->
+    <form id="buscarPorNomeParcialForm">
+        <label for="nomeParcial">Buscar por Nome Parcial:</label>
+        <input type="text" id="nomeParcial" name="nomeParcial">
+        <button type="submit">Buscar</button>
+    </form>
+    
+    <!-- Botão para listar todas as cervejas -->
+    <button id="listarTodasBtn">Listar Todas as Cervejas</button>
+    
+    <!-- Botão para ordenar as cervejas pelo maior ABV -->
+    <button id="ordenarPorABVBtn">Ordenar por ABV</button>
+    
+    <!-- Div para exibir resultados das consultas -->
+    <div id="resultado"></div>
+    
+    <script>
+        // Função para enviar requisição AJAX ao servidor
+        function enviarRequisicao(url, params) {
+            fetch(url, params)
+                .then(response => response.json())
+                .then(data => {
+                    // Exibir os resultados no elemento 'resultado'
+                    const resultadoDiv = document.getElementById("resultado");
+                    resultadoDiv.innerHTML = '';
+
+                    data.cervejas.forEach(cerveja => {
+                        const cervejaDiv = document.createElement('div');
+                        cervejaDiv.classList.add('cerveja');
+
+                        const nomeH2 = document.createElement('h2');
+                        nomeH2.textContent = cerveja.nome;
+                        cervejaDiv.appendChild(nomeH2);
+
+                        const abvP = document.createElement('p');
+                        abvP.textContent = `ABV: ${cerveja.abv}`;
+                        cervejaDiv.appendChild(abvP);
+
+                        const tipoP = document.createElement('p');
+                        tipoP.textContent = `Tipo: ${cerveja.tipo}`;
+                        cervejaDiv.appendChild(tipoP);
+
+                        const nacionalidadeP = document.createElement('p');
+                        nacionalidadeP.textContent = `Nacionalidade: ${cerveja.nacionalidade}`;
+                        cervejaDiv.appendChild(nacionalidadeP);
+
+                        resultadoDiv.appendChild(cervejaDiv);
+                    });
+                })
+                .catch(error => console.error('Erro ao enviar requisição:', error));
+        }
+
+        // Função para buscar cervejas por nome
+        document.getElementById("buscarPorNomeForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const nome = document.getElementById("nome").value;
+            const url = `/cervejas/buscar-por-nome?nome=${nome}`;
+            enviarRequisicao(url, { method: 'GET' });
+        });
+
+        // Função para buscar cervejas por nacionalidade
+        document.getElementById("buscarPorNacionalidadeForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const nacionalidade = document.getElementById("nacionalidade").value;
+            const url = `/cervejas/buscar-por-nacionalidade?nacionalidade=${nacionalidade}`;
+            enviarRequisicao(url, { method: 'GET' });
+        });
+
+        // Função para buscar cervejas por tipo
+        document.getElementById("buscarPorTipoForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const tipo = document.getElementById("tipo").value;
+            const url = `/cervejas/buscar-por-tipo?tipo=${tipo}`;
+            enviarRequisicao(url, { method: 'GET' });
+        });
+
+        // Função para buscar cervejas por nome parcial
+        document.getElementById("buscarPorNomeParcialForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const nomeParcial = document.getElementById("nomeParcial").value;
+            const url = `/cervejas/buscar-por-nome-parcial?nomeParcial=${nomeParcial}`;
+            enviarRequisicao(url, { method: 'GET' });
+        });
+
+        // Função para listar todas as cervejas
+        document.getElementById("listarTodasBtn").addEventListener("click", function() {
+            const url = '/cervejas';
+            enviarRequisicao(url, { method: 'GET' });
+        });
+
+        // Função para ordenar as cervejas pelo maior ABV
+        document.getElementById("ordenarPorABVBtn").addEventListener("click", function() {
+            const url = '/cervejas/ordenar-por-abv';
+            enviarRequisicao(url, { method: 'GET' });
+        });
+    </script>
+</body>
+</html>

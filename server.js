@@ -5,6 +5,9 @@ const routes = require('./routes/cervejas'); // Alterado para corresponder ao ar
 const port = 3000;
 const app = express();
 
+// Configuração para servir arquivos estáticos da pasta 'public'
+app.use(express.static('public'));
+
 app.use(bodyParser.json());
 app.use('/cervejas', routes); // Alterado para refletir o caminho correto das rotas das cervejas
 
