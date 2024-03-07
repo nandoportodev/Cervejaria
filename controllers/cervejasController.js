@@ -55,7 +55,7 @@ exports.buscarCervejasPorTipo = (req, res) => {
             res.status(200).send({ cervejas: resultado.rows });
         })
         .catch((error) => {
-            console.error('Erro ao buscar cervejas por tipo:', error);
+            console.error('Erro22 ao buscar cervejas por tipo:', error);
             res.status(500).send({ status: 'Erro de database' });
         });
 };
